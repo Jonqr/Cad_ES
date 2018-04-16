@@ -1,0 +1,81 @@
+<?php
+class TopicoPostDAO {
+	protected $db;
+	function __construct() {
+		try {
+			$this->db = new PDO('mysql:host=localhost;dbname=forum', 'root', '');
+			$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
+		catch(Exception $e) {
+			print 'Erro ao conectar';
+		}
+	}
+	 /**
+     * Método retorna a lista de TopicoPosts cadastrados no banco
+     * @return Lista de TopicoPosts
+     */
+
+	public function getLista() {
+		$sql = "SELECT * FROM TopicoPost";
+		$result = $this->db->query($sql);
+		return $result;
+	}
+
+	 /**
+     * Método que recebe o id do TopicoPost
+     * @return objeto TopicoPost.
+     */
+	public function get($id) {
+		$TopicoPost = new TopicoPost();
+		$sql = "SELECT * FROM TopicoPost
+				WHERE idTopicoPost = :idTopicoPost";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopicoPost' => $idTopicoPost,
+		));
+		$dados = $query->fetch();
+		$TopicoPost->setIdTopicoPost($dados['idTopicoPost']);
+		$TopicoPost->setIdTopico    ($dados['idTopico']);
+		$TopicoPost->setIdpost      ($dados['idPost']);
+		return $TopicoPost;
+	}
+	 /**
+     * Método que insere no banco de dados
+     * @param objeto $TopicoPost
+     */
+
+	public function insere(TopicoPost $TopicoPost) {
+		$sql = "INSERT INTO TopicoPost
+					(idTopicoPost, idTopico, idPost)
+				VALUES
+					(:idTopicoPost, :idTopico, :idPost)";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopicoPost' => $TopicoPost->getIdTopicoPost(),
+			':idTopico'     => $TopicoPost->getIdTopico(),
+			':idPost'       => $TopicoPost->getIdPost(),
+		));
+	}
+	/*public function remove(TopicoPost $TopicoPost) {
+		$sql = "DELETE FROM TopicoPost
+				WHERE idTopicoPost = :idTopicoPost";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopicoPost' => $TopicoPost->getIdTopicoPost(),
+		));
+	}
+	public function atualiza(TopicoPost $TopicoPost) {
+		$sql = "UPDATE TopicoPost SET
+					idTopicoPost = :idTopicoPost,
+					idTopico     = :idTopico,
+					idPost       = :idPost,
+				WHERE
+					idTopicoPost = :idTopicoPost";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopicoPos' 	=> $TopicoPost->getIdTopicoPos(),
+			':idTopico ' 	=> $TopicoPost->getIdTopico (),
+			':idPost' 		=> $TopicoPost->getIdPost(),
+		));
+	}*/
+}

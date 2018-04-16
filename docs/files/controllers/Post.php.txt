@@ -1,0 +1,68 @@
+<?php
+include_once("/opt/lampp/htdocs/forum/models/Post.php");
+include_once("/opt/lampp/htdocs/forum/dao/PostDAO.php");
+
+$Post = new Post();
+
+if(isset($_POST['Submit'])){
+	$idTopico = $_POST['idTopico'];
+} else {
+	$idTopico = $_GET['idTopico'];	
+}
+
+
+if (isset($_POST['Submit'])) {
+
+	// inserir
+	if (isset($_POST['tituloPost'], $_POST['textoPost'], $_POST['idTopico'])) {
+		// criar o objeto
+		$Post->setTituloPost($_POST['tituloPost']);
+		$Post->setTextoPost ($_POST['textoPost']);
+		$Post->setIdUsuario ($_POST['idUsuario']);
+		$Post->setIdTopico ($_POST['idTopico']);
+		$dao = new PostDAO();
+		$dao->insere($Post);
+		$mensagem = "Post cadastrado!";
+		require_once __DIR__.'/../views/mensagem.php';
+	}
+	else {
+		$Post = new Post();
+		require_once __DIR__.'/../views/Post/form.php';
+	}
+}
+
+elseif (isset($_GET['f']) && ($_GET['f'] == 'atualiza')) {
+	// atualizar
+	$dao = new PostDAO();
+	$Post = $dao->get($_GET['idPost']);
+	if (isset($_POST['idPost'], $_POST['tituloPost'], $_POST['textoPost'], $_POST['idUsuario'])) {
+		// atualiza no banco
+		$Post->setIdPost    ($_POST['idPost']);
+		$Post->setTituloPost($_POST['tituloPost']);
+		$Post->setTextoPost ($_POST['textoPost']);
+		$Post->setIdUsuario ($_POST['idUsuario']);
+		$dao->atualiza($Post);
+		$mensagem = "Post atualizado!";
+		require_once __DIR__.'/../views/mensagem.php';
+	}
+	else {
+		// mostra form de alteracao
+		require_once __DIR__.'/../views/cliente/form.php';
+	}
+}
+elseif (isset($_GET['f']) && ($_GET['f'] == 'remove')) {
+	// remover
+	$dao = new PostDAO();
+	$Post = $dao->get($_GET['idPost']);
+	$dao->remove($Post);
+	$mensagem = "Post removido!";
+	require_once __DIR__.'/../views/mensagem.php';
+}
+else {
+	// consulta e mostra a lista
+	if(isset($_GET['idTopico'])){
+		$dao = new PostDAO();
+		$lista = $dao->getLista($_GET['idTopico']);
+	}
+}
+

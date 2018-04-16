@@ -1,0 +1,19 @@
+<?php require_once('../../controllers/Topico.php'); ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cadastro de Topicos</title>
+</head>
+<body>
+	<form action="../../controllers/Topico.php" method="post" id="form1">
+		Descricao: <br/>
+		<input type="text" name="descTopico" size="30"> <br/>
+		<br/>
+		<!-- Recebenso idSessao Do post da pagina anterior-->
+		<input type="hidden" name="idSecao" value="<?=$idSecao?>">
+		<input type="hidden" name="idUsuario" value="1">
+		<input type="submit" name="Submit" value="Salvar">
+	</form>
+</body>
+</html>

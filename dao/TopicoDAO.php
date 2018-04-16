@@ -1,0 +1,69 @@
+<?php
+class TopicoDAO {
+	protected $db;
+	function __construct() {
+		try {
+			$this->db = new PDO('mysql:host=localhost;dbname=forum', 'root', '');
+			$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
+		catch(Exception $e) {
+			print 'Erro ao conectar';
+		}
+	}
+	 /**
+     * Método retorna a lista de Topicos cadastrados no banco
+     * @param $idSecao
+     * @return Lista de Topicos
+     */
+
+	public function getLista($idSecao) {
+		$sql = "SELECT * FROM Topico WHERE idSecao = $idSecao";
+		$result = $this->db->query($sql);
+		return $result;
+	}
+     /**
+     * Método que recebe o idTopico do Topico
+     * @return objeto Topico.
+     */
+	public function get($idTopico) {
+		$Topico = new Topico();
+		$sql = "SELECT * FROM Topico
+				WHERE idTopico = :idTopico";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopico' => $idTopico,
+		));
+		$dados = $query->fetch();
+		$Topico->setIdTopico  ($dados ['idTopico']);
+		$Topico->setDescTopico($dados ['descTopico']);
+		$Topico->setIdSecao   ($dados ['idSecao']);
+		$Topico->setIdUsuario ($dados ['idUsuario']);
+		return $Topico;
+	}
+	/**
+     * Método que insere no banco de dados
+     * @param objeto $Topico
+     */
+
+	public function insere(Topico $Topico) {
+		$sql = "INSERT INTO Topico
+					(descTopico, idSecao, idUsuario)
+				VALUES
+					(:descTopico, :idSecao, :idUsuario)";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':descTopico' => $Topico->getDescTopico(),
+			':idSecao'    => $Topico->getIdSecao(),
+			':idUsuario'  => $Topico->getIdUsuario()
+		));
+	}
+	/*public function remove(Topico $Topico) {
+		$sql = "DELETE FROM Topico
+				WHERE idTopico = :idTopico";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			':idTopico' => $Topico->getIdTopico(),
+		));
+	}*/
+
+}

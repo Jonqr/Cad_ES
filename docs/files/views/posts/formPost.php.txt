@@ -1,0 +1,22 @@
+<?php require_once('../../controllers/Post.php'); ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cadastro de Posts</title>
+</head>
+<body>
+	<form action="../../controllers/Post.php" method="post" id="form1">
+		Titulo: <br/>
+		<input type="text" name="tituloPost" size="30"> <br/>
+		<br/>
+		Texto: <br/>
+		<textarea rows="4" name="textoPost" cols="50">
+			
+		</textarea>
+		<input type="hidden" name="idTopico" value="<?=$idTopico?>">
+		<input type="hidden" name="idUsuario" value="1">
+		<input type="submit" name="Submit" value="Salvar">
+	</form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Secao</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<a href="index.php?r=secao&f=insere">Inserir</a> <br/>
+	<? if ($lista->rowCount() > 0): ?>
+		<table>
+			<thead>
+				<tr>
+					<th>IdSecao</th>
+					<th>DescSecao</th>
+					<th>Excluir</th>
+				</tr>
+			</thead>
+			<tbody>
+				<? foreach ($lista as $linha): ?>
+					<tr>
+						<td><?=$linha['idSecao']?></td>
+						<td><a href="secao.php?act=atualiza&idSecao=<?=$linha['idSecao']?>"><?=$linha['idSecao']?></a></td>
+						<td><?=$linha['']?></td>
+						<td><a href="index.php?r=secao&f=remove&idSecao=<?=$linha['idSecao']?>">excluir</a></td>
+					</tr>
+				<? endforeach; ?>
+			</tbody>
+		</table>
+	<? else: ?>
+		Não há Secoes cadastradas.
+	<? endif; ?>
+</body>
+</html>
